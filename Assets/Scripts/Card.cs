@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class Card : MonoBehaviour
     public Sprite cardFace, cardBack;
     private bool isFaceDown = true;
     SpriteRenderer spriteRenderer;
+    Vector3 destination;
+    float animationTime;
 
 	private void Awake()
 	{
@@ -26,9 +29,29 @@ public class Card : MonoBehaviour
         else
             spriteRenderer.sprite = cardFace;
     }
+    private void Update()
+    {
+        if(destination!=transform.position)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime / animationTime);
+            return;
+        }
+        
 
-	//Card animation callback
-	public void Flip()
+
+
+
+    }
+
+
+    internal void SetDestination(Vector3 destination, float time)
+    {
+        this.destination = destination;
+        animationTime = time;
+    }
+
+    //Card animation callback
+    public void Flip()
     {
         isFaceDown = !isFaceDown;
         UpdateSprite();

@@ -73,12 +73,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4a390c44ba131b641b15ab804a738459, type: 3}
+  m_Sprite: {fileID: 7496522512765729452, guid: 0a0745089916deb4e923485c18a0cbe8,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 6.86, y: 9.76}
+  m_Size: {x: 0.9846154, y: 1.43}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -93,11 +94,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5328612498189521831}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b9c5d2327a8a5941bb85607c7647f43, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d72bc2d5075fd746bdda3da7db1b434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardFace: {fileID: 0}
-  cardBack: {fileID: 0}
+  cardBack: {fileID: 7496522512765729452, guid: 0a0745089916deb4e923485c18a0cbe8,
+    type: 3}
 --- !u!61 &1348748944170758536
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -115,14 +117,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.2129033, y: 3.1483872}
-    newSize: {x: 6.86, y: 9.76}
+    oldSize: {x: 0.9846154, y: 1.43}
+    newSize: {x: 0.9846154, y: 1.43}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.2129033, y: 3.1483872}
+  m_Size: {x: 1, y: 1.4}
   m_EdgeRadius: 0
 --- !u!95 &8389654768942786742
 Animator:
@@ -134,7 +136,7 @@ Animator:
   m_GameObject: {fileID: 5328612498189521831}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 678669dedf6abcc4790e0726b2bb5ea9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 719dbd35b5cebcc42bda52fd08c068ed, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
