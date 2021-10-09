@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    public CardValue value;
     public Sprite cardFace, cardBack;
     private bool isFaceDown = true;
     SpriteRenderer spriteRenderer;
+    [SerializeField] ParticleSystem winEffect = null;
     Vector3 destination;
     float animationTime;
 
@@ -36,13 +38,12 @@ public class Card : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime / animationTime);
             return;
         }
-        
-
-
-
-
     }
 
+    public void ShowWinEffect()
+    {
+        if (winEffect != null) winEffect.Play();
+    }
 
     internal void SetDestination(Vector3 destination, float time)
     {
@@ -57,8 +58,4 @@ public class Card : MonoBehaviour
         UpdateSprite();
     }
 
-	private void OnMouseDown()
-	{
-        GetComponent<Animator>().SetTrigger("FlipTrigger");
-	}
 }

@@ -25,9 +25,9 @@ public class DeckHandler : MonoBehaviour
 
     private void CreateCardPool()
     {
-        foreach (string card in deck)
+        for (int index = 0; index < deck.Count; index++)
         {
-            Card c = GetCard(deck.IndexOf(card));
+            Card c = GetCard(index).GetComponent<Card>();
             c.transform.parent = GameObject.Find("Deck").transform;
             cardPool.Add(c);
 
@@ -40,15 +40,15 @@ public class DeckHandler : MonoBehaviour
         return cardFaces.Length;
     }
 
-    public Card GetCard(int index)
+    public GameObject GetCard(int index)
     {
         Card c = Instantiate(cardPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
         c.cardBack = cardBack;
         c.cardFace = cardFaces[index];
         c.name = deck[index];
-
+        c.value = (CardValue) ((index+1)-13*Mathf.FloorToInt(index/13));    //get card value from running index
         c.gameObject.SetActive(false);
-        return c;
+        return c.gameObject;
     }
 
     private void PrintDeck()
