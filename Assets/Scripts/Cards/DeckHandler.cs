@@ -10,7 +10,6 @@ public class DeckHandler : MonoBehaviour
     public Sprite cardBack;
     public Card cardPrefab;
     List<Card> cardPool = new List<Card>();
-    private static int index = 0;
 
     public static string[] suits = new string[] { "H", "S", "D", "C" };
     public static string[] ranks = new string[] { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
@@ -36,10 +35,13 @@ public class DeckHandler : MonoBehaviour
 
     }
 
+    internal int GetDeckSize()
+    {
+        return cardFaces.Length;
+    }
 
     public Card GetCard(int index)
     {
-        Debug.Log($"index = {index}");
         Card c = Instantiate(cardPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
         c.cardBack = cardBack;
         c.cardFace = cardFaces[index];

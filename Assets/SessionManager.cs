@@ -5,48 +5,61 @@ using UnityEngine;
 
 public class SessionManager : MonoBehaviour
 {
-    [SerializeField] Transform PlayerPosition, OpponentPosition;
     DeckHandler deckHandler;
-    Deck playerDeck, opponentDeck;
-
+    Deck[] decks;
 
     private void Awake()
     {
-        
+        deckHandler = FindObjectOfType<DeckHandler>();
+        decks = FindObjectsOfType<Deck>();
     }
     void Start()
     {
-        deckHandler = FindObjectOfType<DeckHandler>();
-        playerDeck = PlayerPosition.GetComponentInChildren<Deck>();
-        opponentDeck = OpponentPosition.GetComponentInChildren<Deck>();
         InitDecks();
     }
 
+    private void OnEnable()
+    {
+        foreach (Deck deck in decks)
+
+            deck.OnDeckInteraction += SpawnCardsFormDecks;
+    }
+    private void OnDisable()
+    {
+        foreach (Deck deck in decks)
+            deck.OnDeckInteraction -= SpawnCardsFormDecks;
+    }
     private void InitDecks()
     {
+        int totalCardsInDeck = deckHandler.GetDeckSize();
+        int cardsPerPlayer = Mathf.FloorToInt(totalCardsInDeck / decks.Length);
+        Debug.Log($"Dealing {totalCardsInDeck} cards to {decks.Length} players. {cardsPerPlayer} cards per player");
+
+
+
         List<Card> cards = new List<Card>();
-        for(int i=0; i<26; i++)
+        for(int i=0; i< cardsPerPlayer* decks.Length; i++)
         {
             Card card = deckHandler.GetCard(i);
             cards.Add(card);
-
         }
         
-        playerDeck.PopulateDeck(cards);
-        cards.Clear();
-        for (int i = 26; i < 52; i++)
-        {
-            Card card = deckHandler.GetCard(i);
-            cards.Add(card);
+        //playerDeck.PopulateDeck(cards);
+        //cards.Clear();
+        //for (int i = 26; i < 52; i++)
+        //{
+        //    Card card = deckHandler.GetCard(i);
+        //    cards.Add(card);
 
-        }
+        //}
 
-        opponentDeck.PopulateDeck(cards);
+        //opponentDeck.PopulateDeck(cards);
     }
 
-    // Update is called once per frame
-    void Update()
+    
+    private void SpawnCardsFormDecks()
     {
-        
+        foreach (Deck deck in decks)
+            deck.SpawnCard();
     }
 }

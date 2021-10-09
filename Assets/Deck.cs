@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
+
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Deck : MonoBehaviour
 {
     public Stack<Card> cards = new Stack<Card>();
     [SerializeField] Transform cardDestination;
-    
+
+    public event Action OnDeckInteraction;
+
     public void PopulateDeck(List<Card> cards)
     {
         foreach (Card card in cards)
@@ -19,19 +24,40 @@ public class Deck : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            SpawnCard();
+            OnDeckInteraction?.Invoke();
         }
     }
 
-    private void SpawnCard()
+    public void SpawnCard()
     {
         if (cards.Count == 0) return;   //do nothing if empty
         Card card = cards.Pop();
+        Animator cardAnimator = card.GetComponent<Animator>();
+
         card.transform.position = transform.position;
-        card.transform.parent = cardDestination;
         card.gameObject.SetActive(true);
-        card.SetDestination(cardDestination.position, .3f);
-        card.GetComponent<Animator>().SetTrigger("ThrowTrigger");
+        
+        cardAnimator.SetTrigger("FlipTrigger");
+        card.SetDestination(cardDestination.position, GetAnimationTime(cardAnimator)/2);
+        card.transform.parent = cardDestination;
+
+
+    }
+
+    public float GetAnimationTime(Animator cardAnimator)
+    {
+        AnimationClip[] clips = cardAnimator.runtimeAnimatorController.animationClips;
+        foreach (AnimationClip clip in clips)
+        {
+            switch (clip.name)
+            {
+                case "Flip":
+                    return clip.length;
+                case "Throw":
+                    return clip.length;
+            }
+        }
+        return 0;
 
     }
 }
