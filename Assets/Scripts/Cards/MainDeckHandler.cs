@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 using Random = System.Random;
 
-public class DeckHandler : MonoBehaviour
+public class MainDeckHandler : MonoBehaviour
 {
     public Sprite[] cardFaces;
     public Sprite cardBack;
