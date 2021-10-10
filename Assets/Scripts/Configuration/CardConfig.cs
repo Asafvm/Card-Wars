@@ -15,3 +15,10 @@ public enum CardValue
     King,
     A,
 }
+
+
+public class CardAnimations
+{
+    public const string flipCard = "FlipTrigger";
+    public const string throwCard = "ThrowTrigger";
+}

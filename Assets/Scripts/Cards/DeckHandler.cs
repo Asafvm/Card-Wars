@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 using UnityEngine;
+using UnityEngine.Events;
+
+using Random = System.Random;
 
 public class DeckHandler : MonoBehaviour
 {
@@ -14,25 +18,55 @@ public class DeckHandler : MonoBehaviour
     public static string[] suits = new string[] { "H", "S", "D", "C" };
     public static string[] ranks = new string[] { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
 
+    [Serializable]
+    public class DeckChangeEvent : UnityEvent<string> { }
+    [SerializeField] DeckChangeEvent OnDeckChangedEvent;
+
+    
+
     List<string> deck = new List<string>();
     void Awake()
     {
         GenerateDeck();
-        ShuffleDeck();
         Debug.Log("Deck ready");
-        //PrintDeck(); //display all cards
     }
 
-    private void CreateCardPool()
+    public void StartGame()
     {
-        for (int index = 0; index < deck.Count; index++)
+        CollectCards(); //collect and hide cards
+        ShuffleDeck();  //shuffle before the game begins
+    }
+
+    private void CollectCards()
+    {
+        Card[] cards = FindObjectsOfType<Card>();
+        foreach(Card card in cards)
         {
-            Card c = GetCard(index).GetComponent<Card>();
-            c.transform.parent = GameObject.Find("Deck").transform;
-            cardPool.Add(c);
-
+            card.transform.position = transform.position;
+            card.gameObject.SetActive(false);
         }
+    }
 
+    private IEnumerator OnTransformChildrenChanged()
+    {
+        OnDeckChangedEvent?.Invoke(transform.childCount.ToString());
+
+        yield return new WaitForSeconds(2f); //let animation finish
+        for (int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.SetActive(false);
+    }
+
+    private void CreateNewCard(int index)
+    {
+        Card card = Instantiate(cardPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+        card.cardBack = cardBack;
+        card.cardFace = cardFaces[index];
+        card.name = deck[index];
+        card.value = (CardValue)((index + 1) - 13 * Mathf.FloorToInt(index / 13));    //get card value from running index
+        card.gameObject.SetActive(false);
+        card.gameObject.layer = LayerMask.NameToLayer("UI");
+        card.transform.parent = GameObject.Find("Deck").transform;
+        cardPool.Add(card);
     }
 
     internal int GetDeckSize()
@@ -42,13 +76,8 @@ public class DeckHandler : MonoBehaviour
 
     public GameObject GetCard(int index)
     {
-        Card c = Instantiate(cardPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-        c.cardBack = cardBack;
-        c.cardFace = cardFaces[index];
-        c.name = deck[index];
-        c.value = (CardValue) ((index+1)-13*Mathf.FloorToInt(index/13));    //get card value from running index
-        c.gameObject.SetActive(false);
-        return c.gameObject;
+        if (index < 0 || index > cardPool.Count) return null;
+        return cardPool[index].gameObject;
     }
 
     private void PrintDeck()
@@ -64,10 +93,7 @@ public class DeckHandler : MonoBehaviour
         }
     }
 
-    private void ShuffleDeck()
-    {
 
-    }
 
     private void GenerateDeck()
     {
@@ -82,6 +108,27 @@ public class DeckHandler : MonoBehaviour
         CreateCardPool();
 
     }
+    private void CreateCardPool()
+    {
+        for (int index = 0; index < deck.Count; index++)
+        {
+            CreateNewCard(index);
 
+        }
 
+    }
+    //code taken from stackoverflow
+    private void ShuffleDeck()
+    {
+        Random rng = new Random();
+        int n = cardPool.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            Card value = cardPool[k];
+            cardPool[k] = cardPool[n];
+            cardPool[n] = value;
+        }
+    }
 }
