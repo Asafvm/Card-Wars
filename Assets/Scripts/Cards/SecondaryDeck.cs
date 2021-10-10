@@ -36,7 +36,7 @@ public class SecondaryDeck : MonoBehaviour
         {
             float forward = transform.rotation.z == 0 ? 1 : -1; //stack will build upwards depending on which side of the table the player is
 
-            transform.GetChild(i).GetComponent<Card>().SetDestination(transform.position + new Vector3(0, forward * yOffset * i, -(zOffset * i)), 0);
+            transform.GetChild(i).GetComponent<CardMover>().SetDestination(transform.position + new Vector3(0, forward * yOffset * i, -(zOffset * i)), 0);
         }
     }
     private Card GetCurrentCard()
@@ -74,7 +74,7 @@ public class SecondaryDeck : MonoBehaviour
 
         do
         {
-            transform.GetChild(0).GetComponent<Card>().HandleCardTransitions(winningDeck, CardAnimations.throwCard);
+            transform.GetChild(0).GetComponent<CardMover>().HandleCardTransitions(winningDeck, CardAnimations.throwCard);
         } while (transform.childCount > 0);
         
     }

@@ -32,7 +32,7 @@ public class DeckBehaviour : MonoBehaviour
             Card cardComponent = child.GetComponent<Card>();
             if (cards.Contains(cardComponent)) continue;
             //insert card to queue
-            transform.GetChild(i).gameObject.SetActive(false);
+            child.gameObject.SetActive(false);
             cards.Enqueue(cardComponent);
         }
 
@@ -77,7 +77,7 @@ public class DeckBehaviour : MonoBehaviour
         card.transform.rotation = Quaternion.Euler(0, 0, 0);
         card.transform.position = transform.position;
 
-        card.HandleCardTransitions(secondaryDeck, faceDown ? null : CardAnimations.flipCard);
+        card.GetComponent<CardMover>().HandleCardTransitions(secondaryDeck, faceDown ? null : CardAnimations.flipCard);
     }
 
     public int CheckScore()

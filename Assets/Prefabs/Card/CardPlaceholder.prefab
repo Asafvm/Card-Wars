@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 282867216942404862}
   - component: {fileID: 7700427104702463998}
   - component: {fileID: 6283417587191269887}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CardPlaceholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,6 +88,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e658e00d5e1b24195db08c43b5ff20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  secondaryDeck: {fileID: 0}
+  cardsLeftText: {fileID: 0}
+  deckCover: {fileID: 0}
+  glowEfect: {fileID: 0}
 --- !u!61 &6283417587191269887
 BoxCollider2D:
   m_ObjectHideFlags: 0

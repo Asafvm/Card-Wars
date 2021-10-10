@@ -59,7 +59,7 @@ public class SessionManager : MonoBehaviour
     }
     private IEnumerator InitDecks()
     {
-        int totalCardsInDeck = 4;// deckHandler.GetDeckSize();
+        int totalCardsInDeck = deckHandler.GetDeckSize();
         int cardsPerPlayer = Mathf.FloorToInt(totalCardsInDeck / decks.Length);
         Debug.Log($"Dealing {totalCardsInDeck} cards to {decks.Length} players. {cardsPerPlayer} cards per player");
 
@@ -70,7 +70,7 @@ public class SessionManager : MonoBehaviour
             Card card = deckHandler.GetCard(i).GetComponent<Card>();
             card.gameObject.SetActive(true);
 
-            card.HandleCardTransitions(decks[deckIndex].transform, CardAnimations.throwCard);
+            card.GetComponent<CardMover>().HandleCardTransitions(decks[deckIndex].transform, CardAnimations.throwCard);
             decks[deckIndex].PopulateDeck(card);
             yield return new WaitForSeconds(timeBetweenDealingCards);
         }
@@ -88,7 +88,6 @@ public class SessionManager : MonoBehaviour
         for(int deckIndex=0; deckIndex<decks.Length; deckIndex++)
         {
             int tempScore = decks[deckIndex].CheckScore();
-            Debug.Log($"{tempScore}");
 
             if (tempScore == score)
             {
@@ -236,6 +235,7 @@ public class SessionManager : MonoBehaviour
     private void ToggleControls(bool active)
     {
         foreach (DeckBehaviour deck in decks)
-            deck.GetComponent<BoxCollider2D>().enabled = active;
+            if(TryGetComponent(out BoxCollider2D collider2D))
+                collider2D.enabled = active;
     }
 }

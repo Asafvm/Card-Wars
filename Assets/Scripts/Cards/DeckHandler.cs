@@ -58,14 +58,14 @@ public class DeckHandler : MonoBehaviour
 
     private void CreateNewCard(int index)
     {
-        Card card = Instantiate(cardPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+        Card card = Instantiate(cardPrefab, transform.localPosition, Quaternion.identity);
         card.cardBack = cardBack;
         card.cardFace = cardFaces[index];
         card.name = deck[index];
         card.value = (CardValue)((index + 1) - 13 * Mathf.FloorToInt(index / 13));    //get card value from running index
         card.gameObject.SetActive(false);
         card.gameObject.layer = LayerMask.NameToLayer("UI");
-        card.transform.parent = GameObject.Find("Deck").transform;
+        card.transform.SetParent(GameObject.Find("Deck").transform,false);
         cardPool.Add(card);
     }
 

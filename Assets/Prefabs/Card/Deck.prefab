@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6713212451340687834}
   - component: {fileID: 6713212451340687829}
-  m_Layer: 0
-  m_Name: Deck 1
+  m_Layer: 5
+  m_Name: Deck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,3 +99,6 @@ MonoBehaviour:
   cardBack: {fileID: 21300000, guid: 9195f6779c8aa46498748c13596977fd, type: 3}
   cardPrefab: {fileID: 5086024993430068916, guid: 07f9d703f48aa5b478501db0549606a3,
     type: 3}
+  OnDeckChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
