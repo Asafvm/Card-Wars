@@ -15,27 +15,24 @@ public class Card : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
     }
-
-    void Start()
+    private void Update()
     {
-        isFaceDown = true;
-        UpdateSprite();
-    }
-
-	private void UpdateSprite()
-	{
-		if(isFaceDown)
+        if (isFaceDown)
             spriteRenderer.sprite = cardBack;
         else
             spriteRenderer.sprite = cardFace;
     }
+    void Start()
+    {
+        isFaceDown = true;
+    }
+
     
 
     //Card animation callback
     public void Flip()
     {
         isFaceDown = !isFaceDown;
-        UpdateSprite();
     }
 
 

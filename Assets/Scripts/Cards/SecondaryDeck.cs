@@ -86,10 +86,15 @@ public class SecondaryDeck : MonoBehaviour
         if (winEffect != null)
         {
             Card card = GetCurrentCard();
+            ParticleSystem ps;
             if (card == null)
-                Instantiate(winEffect, transform.position, Quaternion.identity);
+                ps =Instantiate(winEffect, transform.position, Quaternion.identity);
             else
-                Instantiate(winEffect, card.transform.position, Quaternion.identity);
+                ps =Instantiate(winEffect, card.transform.position, Quaternion.identity);
+
+            //scale effect to card size
+            ps.transform.SetParent(card.transform, false);
+            ps.transform.localPosition = Vector3.zero;
         }
 
     }

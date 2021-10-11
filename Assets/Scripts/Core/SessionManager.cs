@@ -74,6 +74,8 @@ public class SessionManager : MonoBehaviour
             decks[deckIndex].PopulateDeck(card);
             yield return new WaitForSeconds(timeBetweenDealingCards);
         }
+        foreach (DeckBehaviour deck in decks)
+            deck.HideCards();
         state = GameState.Idle;
     }
 

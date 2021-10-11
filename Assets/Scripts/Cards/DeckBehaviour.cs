@@ -38,6 +38,13 @@ public class DeckBehaviour : MonoBehaviour
 
     }
 
+    internal void HideCards()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
     private void ToggleVisuals()
     {
         if (deckCover != null)
@@ -79,6 +86,7 @@ public class DeckBehaviour : MonoBehaviour
 
         card.GetComponent<CardMover>().HandleCardTransitions(secondaryDeck, faceDown ? null : CardAnimations.flipCard);
     }
+
 
     public int CheckScore()
     {
