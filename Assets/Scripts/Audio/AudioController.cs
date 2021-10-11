@@ -54,4 +54,13 @@ public class AudioController : MonoBehaviour
         source.clip = backgroundMusic;
         source.Play();
     }
+
+    public void EnableMusic(bool enable)
+    {
+        source.enabled = enable;
+    }
+    public void EnableSounds(bool enable)
+    {
+        PlayerPrefs.SetInt("Sound", enable ? 1 : 0);
+    }
 }

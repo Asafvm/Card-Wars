@@ -40,7 +40,8 @@ public class CardMover : MonoBehaviour
             cardAnimator.SetTrigger(animationTrigger);
         SetDestination(cardDestination.position, GetAnimationTime(cardAnimator) / 2);
         transform.parent = cardDestination;
-        OnCardMove?.Invoke();
+        if(PlayerPrefs.GetInt("Sound") == 1)
+            OnCardMove?.Invoke();
     }
 
     public float GetAnimationTime(Animator cardAnimator)
