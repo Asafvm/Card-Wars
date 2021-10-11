@@ -92,6 +92,8 @@ public class SecondaryDeck : MonoBehaviour
             else
                 ps =Instantiate(winEffect, card.transform.position, Quaternion.identity);
 
+            //play sound effect
+            GetComponent<AudioSource>().Play();
             //scale effect to card size
             ps.transform.SetParent(card.transform, false);
             ps.transform.localPosition = Vector3.zero;

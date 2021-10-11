@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CardMover : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class CardMover : MonoBehaviour
 
     Vector3 destination;
     float animationTime;
-
+    [SerializeField] UnityEvent OnCardMove;
     private void Awake()
     {
         cardAnimator = GetComponent<Animator>();
@@ -39,6 +40,7 @@ public class CardMover : MonoBehaviour
             cardAnimator.SetTrigger(animationTrigger);
         SetDestination(cardDestination.position, GetAnimationTime(cardAnimator) / 2);
         transform.parent = cardDestination;
+        OnCardMove?.Invoke();
     }
 
     public float GetAnimationTime(Animator cardAnimator)

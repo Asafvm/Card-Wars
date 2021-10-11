@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6367704282688258078}
   - component: {fileID: 6367704282688258077}
+  - component: {fileID: 1628978299}
   m_Layer: 0
   m_Name: SessionManager
   m_TagString: Untagged
@@ -43,4 +44,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 067ac1877325c51499459e6b679bc6c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: PlayMusic
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   timeBetweenDealingCards: 0.05
+--- !u!114 &1628978299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367704282688258076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43634711ab14f244c94efe1a3cd27d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

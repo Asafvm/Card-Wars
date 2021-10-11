@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SessionManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class SessionManager : MonoBehaviour
     NotificationsHandler notificationsHandler;
     GameState state;
 
+    [Serializable]
+    public class StateEvent : UnityEvent<GameState> { }
+    [SerializeField] public StateEvent OnStateChanged;
 
     [Header("Tune Ups")]
     [SerializeField] float timeBetweenDealingCards = .05f;
@@ -205,6 +209,7 @@ public class SessionManager : MonoBehaviour
     private void SetGameState(GameState state)
     {
         this.state = state;
+        OnStateChanged?.Invoke(state);
     }
     private void CheckForGameOverCondition()
     {
