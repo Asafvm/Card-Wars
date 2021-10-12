@@ -24,7 +24,6 @@ public class SessionManager : MonoBehaviour
 
     private void Awake()
     {
-        SetGameState(GameState.Setup);
         mainDeckHandler = FindObjectOfType<MainDeckHandler>();
         decks = FindObjectsOfType<DeckBehaviour>();
         notificationsHandler = FindObjectOfType<NotificationsHandler>();
@@ -34,6 +33,8 @@ public class SessionManager : MonoBehaviour
 
     void Start()
     {
+        SetGameState(GameState.Setup);
+
         if (decks.Length < 2)
         {
             Debug.LogError("Not enough players to begin");
