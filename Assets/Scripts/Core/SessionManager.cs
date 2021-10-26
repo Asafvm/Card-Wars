@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -46,13 +47,12 @@ public class SessionManager : MonoBehaviour
     private void StartGameSequence()
     {
         mainDeckHandler.StartGame();
-        StartCoroutine(InitDecks());
+        StartCoroutine(InitDecksAsync());
     }
 
     private void OnEnable()
     {
         foreach (DeckBehaviour deck in decks)
-
             deck.OnDeckInteraction += HandleRound;
     }
     private void OnDisable()
@@ -60,77 +60,92 @@ public class SessionManager : MonoBehaviour
         foreach (DeckBehaviour deck in decks)
             deck.OnDeckInteraction -= HandleRound;
     }
-    private IEnumerator InitDecks()
+    private IEnumerator InitDecksAsync()
     {
         //Deal even amount of card to all players
-
         int totalCardsInDeck = mainDeckHandler.GetDeckSize();
         int cardsPerPlayer = Mathf.FloorToInt(totalCardsInDeck / decks.Length);
         Debug.Log($"Dealing {totalCardsInDeck} cards to {decks.Length} players. {cardsPerPlayer} cards per player");
 
-        for (int i = 0; i < cardsPerPlayer * decks.Length; i++)
+        for (int index = 0; index < cardsPerPlayer * decks.Length; index++)
         {
-            int deckIndex = i % decks.Length;
-            Card card = mainDeckHandler.GetCard(i).GetComponent<Card>();
-            card.gameObject.SetActive(true);
+            int deckIndex = index % decks.Length;
+            Card card;
+            DrawCard(index, out card);
 
             //animate card dealing
-            card.GetComponent<CardMover>().HandleCardTransitions(decks[deckIndex].transform, CardAnimations.throwCard);
-            decks[deckIndex].PopulateDeck(card);
+            AnimateCard(deckIndex, card.gameObject);
+
             yield return new WaitForSeconds(timeBetweenDealingCards);
+
         }
-        foreach (DeckBehaviour deck in decks)
-            deck.HideCards();
         state = GameState.Idle;
     }
 
+    private void DrawCard(int i, out Card card)
+    {
+        card = mainDeckHandler.GetCard(i);
+        if (card != null)
+            card.gameObject.SetActive(true);
+    }
+
+    private void AnimateCard(int deckIndex, GameObject cardObject)
+    {
+        CardMover cardMover = cardObject.GetComponent<CardMover>();
+        cardMover.HandleCardTransitions(decks[deckIndex].transform, CardAnimations.throwCard);
+    }
 
     private void HandleRound()
     {
         if (state != GameState.Idle) return;
         SetGameState(GameState.Round);
-        SpawnCardsFaceDown(false);
-        CheckScore();
+        BattleSequence();
 
     }
 
-
-    private IEnumerator HandleWar()
+    private void BattleSequence()
     {
+        SpawnCardsFaceDown(false);
+        if (CheckScoreAsync()) return;
+        else StartCoroutine(HandleWarAsync());
+    }
 
-        yield return new WaitForSeconds(1.5f);  //dramatic pause
+    private IEnumerator HandleWarAsync()
+    {
+        yield return new WaitForSeconds(.5f);//dramatic pause
+
         SetGameState(GameState.War);
 
         //check if all players able to start war phase
-        if (!CheckWarConditions()) yield break;
+        //if (!CheckWarConditions()) yield break;
+        if (!CheckWarConditions()) yield break; //not tested yet
 
         //start war phase
         SpawnCardsFaceDown(true);
         yield return new WaitForSeconds(.5f);
-        SpawnCardsFaceDown(false);
-        CheckScore();
+        BattleSequence();
+
     }
 
-    private void CheckScore()
+    private bool CheckScoreAsync()
     {
         //check and compare value of the latest card in the secondary deck
         int winningDeck = -1, score = -1;
-        for(int deckIndex=0; deckIndex<decks.Length; deckIndex++)
+        for (int deckIndex = 0; deckIndex < decks.Length; deckIndex++)
         {
             int tempScore = decks[deckIndex].CheckScore();
-
+            Debug.Log($"{decks[deckIndex].transform.parent.name} Drew {tempScore}");
             if (tempScore == score)
             {
-                StartCoroutine(HandleWar());
-                return;
+                return false;
             }
             if (tempScore < score) continue;
             score = tempScore;
             winningDeck = deckIndex;
         }
-        if (winningDeck < 0) return;
-
+        //declare winning deck
         OnMatchWin?.Invoke(decks[winningDeck].transform);
+        return true;
     }
 
 
@@ -149,6 +164,7 @@ public class SessionManager : MonoBehaviour
     {
         foreach (DeckBehaviour deck in decks)
             deck.SpawnCard(faceDown);
+
     }
 
 
@@ -198,9 +214,9 @@ public class SessionManager : MonoBehaviour
                 cardsLeft = deck.transform.childCount;
                 deckIndex = i;
             }
-                
+
             else if (cardsLeft == deck.transform.childCount)
-                return "It's a Draw!";     
+                return "It's a Draw!";
         }
 
         return $"{decks[deckIndex].transform.parent.name} Won!";
@@ -222,7 +238,7 @@ public class SessionManager : MonoBehaviour
                 return;
             }
         }
-            
+
     }
 
     private void NotificationAnimation()
@@ -244,7 +260,7 @@ public class SessionManager : MonoBehaviour
     private void ToggleControls(bool active)
     {
         foreach (DeckBehaviour deck in decks)
-            if(TryGetComponent(out BoxCollider2D collider2D))
+            if (TryGetComponent(out BoxCollider2D collider2D))
                 collider2D.enabled = active;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -8,7 +9,6 @@ public class SecondaryDeck : MonoBehaviour
 {
     [SerializeField] ParticleSystem winEffect = null;
     private SessionManager sessionManager;
-    private const float yOffset = .3f, zOffset = .02f;
     private void Awake()
     {
         sessionManager = FindObjectOfType<SessionManager>();
@@ -16,29 +16,14 @@ public class SecondaryDeck : MonoBehaviour
 
     private void OnEnable()
     {
-        sessionManager.OnMatchWin += HandleWin;
+        sessionManager.OnMatchWin += HandleWinAsync;
     }
 
     private void OnDisable()
     {
-        sessionManager.OnMatchWin -= HandleWin;
+        sessionManager.OnMatchWin -= HandleWinAsync;
     }
-    private void OnTransformChildrenChanged()
-    {
-        OrginizeTransformChildren();
-    }
-
-    private void OrginizeTransformChildren()
-    {
-
-        if (transform.childCount < 1) return;
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            float forward = transform.rotation.z == 0 ? 1 : -1; //stack will build upwards depending on which side of the table the player is
-
-            transform.GetChild(i).GetComponent<CardMover>().SetDestination(transform.position + new Vector3(0, forward * yOffset * i, -(zOffset * i)), 0);
-        }
-    }
+ 
     private Card GetCurrentCard()
     {
         if (transform.childCount < 1) return null;
@@ -50,38 +35,49 @@ public class SecondaryDeck : MonoBehaviour
     public int GetCurrentCardValue()
     {
         Card card = GetCurrentCard();
-        if (card == null) return 0;
-        return (int)card.value;
+        if (card == null)
+        {
+            Debug.Log("No card in deck");
+            return 0;
+        }
+            
+        return card.GetValue();
     }
 
 
-    private void HandleWin(Transform winningDeck)
+    private void HandleWinAsync(Transform winningDeck)
     {
-        StartCoroutine(WinRoutine(winningDeck));
+        StartCoroutine(WinRoutineAsync(winningDeck));
     }
 
-    private IEnumerator WinRoutine(Transform winningDeck)
+    private IEnumerator WinRoutineAsync(Transform winningDeck)
     {
         yield return new WaitForSeconds(.7f);   //sync with visual effects in ScoreHandler
-        ShowWinEffect(winningDeck);
+        ShowWinEffectAsync(winningDeck);
         yield return new WaitForSeconds(1.5f);
-        ClearSecondaryDeck(winningDeck);
+        ClearSecondaryDeckAsync(winningDeck);
     }
 
-    private void ClearSecondaryDeck(Transform winningDeck)
+    private void ClearSecondaryDeckAsync(Transform winningDeck)
     {
         if (transform.childCount < 1) return;
-
         do
         {
-            transform.GetChild(0).GetComponent<CardMover>().HandleCardTransitions(winningDeck, CardAnimations.throwCard);
+            Transform cardObject = transform.GetChild(0);
+            cardObject.GetComponent<CardMover>().HandleCardTransitions(winningDeck, CardAnimations.throwCard);
         } while (transform.childCount > 0);
-        
     }
 
-    public void ShowWinEffect(Transform winningDeck)
+    public void ShowWinEffectAsync(Transform winningDeck)
     {
-        if (transform.parent.GetComponentInChildren<DeckBehaviour>().transform != winningDeck) return;
+        if (transform.parent.GetComponentInChildren<DeckBehaviour>().transform != winningDeck)
+        {
+            Card card = GetCurrentCard();
+            card.GetComponent<Dissolve>().StartDissolvingAsync();
+            return;
+        }
+            
+
 
         if (winEffect != null)
         {

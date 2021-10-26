@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
+using System.Threading.Tasks;
 
 using TMPro;
 
@@ -14,7 +15,7 @@ public class DeckBehaviour : MonoBehaviour
     [SerializeField] Transform secondaryDeck;
     [SerializeField] TextMeshProUGUI cardsLeftText;
     [SerializeField] GameObject deckCover;
-    [SerializeField] ParticleSystem glowEfect;
+    //[SerializeField] ParticleSystem glowEfect;
     public event Action OnDeckInteraction;
 
     private void Awake()
@@ -22,49 +23,26 @@ public class DeckBehaviour : MonoBehaviour
         ToggleVisuals();
     }
 
-    private IEnumerator OnTransformChildrenChanged()
+    private void OnTransformChildrenChanged()
     {
         ToggleVisuals();
-        yield return new WaitForSeconds(2f); //let animation finish
-        for (int i = 0; i < transform.childCount; i++)
         {
-            Transform child = transform.GetChild(i);
-            Card cardComponent = child.GetComponent<Card>();
-            if (cards.Contains(cardComponent)) continue;
+            Transform child = transform.GetChild(transform.childCount-1);
             //insert card to queue
             child.gameObject.SetActive(false);
-            cards.Enqueue(cardComponent);
+            cards.Enqueue(child.GetComponent<Card>());
         }
 
     }
 
-    internal void HideCards()
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-    }
     private void ToggleVisuals()
     {
         if (deckCover != null)
             deckCover.SetActive(transform.childCount > 0);
-        if (glowEfect != null)
-            glowEfect.gameObject.SetActive(transform.childCount > 0); //play effect while deck is not empty
         cardsLeftText.text = transform.childCount.ToString();
 
     }
 
-    public void PopulateDeck(List<Card> cards)
-    {
-        foreach (Card card in cards)
-            this.cards.Enqueue(card);
-
-    }
-    public void PopulateDeck(Card card)
-    {
-        cards.Enqueue(card);
-    }
 
 
     private void OnMouseDown()
@@ -74,6 +52,7 @@ public class DeckBehaviour : MonoBehaviour
             OnDeckInteraction?.Invoke();
         }
     }
+
 
     public void SpawnCard(bool faceDown)
     {
@@ -91,6 +70,7 @@ public class DeckBehaviour : MonoBehaviour
     public int CheckScore()
     {
         return secondaryDeck.GetComponent<SecondaryDeck>().GetCurrentCardValue();
+        
     }
 
     internal bool isSecondaryDeckReady()

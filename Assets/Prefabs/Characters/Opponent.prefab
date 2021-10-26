@@ -15,7 +15,6 @@ MonoBehaviour:
   secondaryDeck: {fileID: 8453036763989119829}
   cardsLeftText: {fileID: 5430253671551436508}
   deckCover: {fileID: 7080440711716926892}
-  glowEfect: {fileID: 0}
 --- !u!1001 &1999755997858847265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42,11 +41,6 @@ PrefabInstance:
         type: 3}
       propertyPath: cardDestination
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 972066677566944517, guid: 835637029cc687d4f9f8b41c4aec26d1,
-        type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 972066677566944518, guid: 835637029cc687d4f9f8b41c4aec26d1,
         type: 3}
