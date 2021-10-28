@@ -39,7 +39,7 @@ public class CardMover : MonoBehaviour
 
     private IEnumerator MoveTo(Transform destination, float animationTime)
     {
-        transform.SetParent(destination, false);
+        transform.SetParent(destination, true);
 
         while ((destination.position - transform.position).magnitude > 1f)
         {
@@ -49,6 +49,7 @@ public class CardMover : MonoBehaviour
                 (Vector3.Distance(destination.position, transform.position) / animationTime) * Time.deltaTime);
             yield return null;
         }
+
 
     }
 

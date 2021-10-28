@@ -51,7 +51,7 @@ public class Deck : MonoBehaviour//, IDeckCreator
         card.value = (CardValue)((index + 1) - 13 * Mathf.FloorToInt(index / 13));    //get card value from running index
         card.gameObject.SetActive(false);
         card.gameObject.layer = LayerMask.NameToLayer("UI");
-        card.transform.SetParent(GameObject.Find("Deck").transform, false);
+        card.transform.SetParent(transform, false);
         return card;
     }
 

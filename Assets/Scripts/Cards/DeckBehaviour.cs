@@ -11,7 +11,7 @@ using UnityEngine.Events;
 
 public class DeckBehaviour : MonoBehaviour
 {
-    public Queue<Card> cards = new Queue<Card>();
+    //public Queue<Card> cards = new Queue<Card>();
     [SerializeField] Transform secondaryDeck;
     [SerializeField] TextMeshProUGUI cardsLeftText;
     [SerializeField] GameObject deckCover;
@@ -26,12 +26,12 @@ public class DeckBehaviour : MonoBehaviour
     private void OnTransformChildrenChanged()
     {
         ToggleVisuals();
-        {
+        
             Transform child = transform.GetChild(transform.childCount-1);
             //insert card to queue
             child.gameObject.SetActive(false);
-            cards.Enqueue(child.GetComponent<Card>());
-        }
+            //cards.Enqueue(child.GetComponent<Card>());
+        
 
     }
 
@@ -47,7 +47,7 @@ public class DeckBehaviour : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (Input.GetMouseButtonDown(0) && cards.Count > 0)
+        if (Input.GetMouseButtonDown(0) && transform.childCount > 0)
         {
             OnDeckInteraction?.Invoke();
         }
@@ -56,14 +56,16 @@ public class DeckBehaviour : MonoBehaviour
 
     public void SpawnCard(bool faceDown)
     {
-        if (cards.Count == 0) return;   //do nothing if empty
+        if (transform.childCount == 0) return;   //do nothing if empty
 
-        Card card = cards.Dequeue();
+        Card card = transform.GetChild(0).GetComponent<Card>();
         card.isFaceDown = true;
         card.transform.rotation = Quaternion.Euler(0, 0, 0);
         card.transform.position = transform.position;
 
-        card.GetComponent<CardMover>().HandleCardTransitions(secondaryDeck, faceDown ? null : CardAnimations.flipCard);
+        CardMover cardMover = card.GetComponent<CardMover>();
+        cardMover.HandleCardTransitions(secondaryDeck, faceDown ? null : CardAnimations.flipCard);
+        
     }
 
 
@@ -75,6 +77,6 @@ public class DeckBehaviour : MonoBehaviour
 
     internal bool isSecondaryDeckReady()
     {
-        return secondaryDeck.childCount == 0;
+        return secondaryDeck.childCount == 0 ;
     }
 }

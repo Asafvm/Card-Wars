@@ -64,7 +64,9 @@ public class SecondaryDeck : MonoBehaviour
         do
         {
             Transform cardObject = transform.GetChild(0);
-            cardObject.GetComponent<CardMover>().HandleCardTransitions(winningDeck, CardAnimations.throwCard);
+            CardMover cardMover = cardObject.GetComponent<CardMover>();
+            cardMover.HandleCardTransitions(winningDeck, CardAnimations.throwCard);
+            
         } while (transform.childCount > 0);
     }
 
@@ -72,6 +74,7 @@ public class SecondaryDeck : MonoBehaviour
     {
         if (transform.parent.GetComponentInChildren<DeckBehaviour>().transform != winningDeck)
         {
+
             Card card = GetCurrentCard();
             card.GetComponent<Dissolve>().StartDissolvingAsync();
             return;

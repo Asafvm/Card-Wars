@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardStackHandler : MonoBehaviour
 {
-    private const float yOffset = .3f, zOffset = .02f;
+    private const float yOffset = .3f, zOffset = .05f;
 
     private void OnTransformChildrenChanged()
     {

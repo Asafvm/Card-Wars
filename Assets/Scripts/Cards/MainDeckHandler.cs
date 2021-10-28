@@ -39,7 +39,8 @@ public partial class MainDeckHandler : Deck
     private void OnTransformChildrenChanged()
     {
         OnDeckChangedEvent?.Invoke(transform.childCount.ToString());
-        transform.GetChild(transform.childCount - 1).gameObject.SetActive(false);
+        if(transform.childCount >0)
+            transform.GetChild(transform.childCount - 1).gameObject.SetActive(false);
     }
 
     public Card GetCard(int i)

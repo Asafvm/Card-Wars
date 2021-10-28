@@ -47,7 +47,7 @@ public class SessionManager : MonoBehaviour
     private void StartGameSequence()
     {
         mainDeckHandler.StartGame();
-        StartCoroutine(InitDecksAsync());
+        StartCoroutine(InitDecks());
     }
 
     private void OnEnable()
@@ -60,7 +60,7 @@ public class SessionManager : MonoBehaviour
         foreach (DeckBehaviour deck in decks)
             deck.OnDeckInteraction -= HandleRound;
     }
-    private IEnumerator InitDecksAsync()
+    private IEnumerator InitDecks()
     {
         //Deal even amount of card to all players
         int totalCardsInDeck = mainDeckHandler.GetDeckSize();
@@ -101,16 +101,17 @@ public class SessionManager : MonoBehaviour
         SetGameState(GameState.Round);
         BattleSequence();
 
+
     }
 
     private void BattleSequence()
     {
-        SpawnCardsFaceDown(false);
-        if (CheckScoreAsync()) return;
-        else StartCoroutine(HandleWarAsync());
+         SpawnCardsFaceDown(false);
+        if (CheckScore()) return;
+        else StartCoroutine(HandleWar());
     }
 
-    private IEnumerator HandleWarAsync()
+    private IEnumerator HandleWar()
     {
         yield return new WaitForSeconds(.5f);//dramatic pause
 
@@ -125,9 +126,10 @@ public class SessionManager : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         BattleSequence();
 
+
     }
 
-    private bool CheckScoreAsync()
+    private bool CheckScore()
     {
         //check and compare value of the latest card in the secondary deck
         int winningDeck = -1, score = -1;
@@ -191,8 +193,8 @@ public class SessionManager : MonoBehaviour
             case GameState.War:
                 ToggleControls(false);
                 DisplayMessage("War!");
-                if (AllSecondaryDecksCleared()) SetGameState(GameState.Idle);
                 NotificationAnimation();
+                if (AllSecondaryDecksCleared()) SetGameState(GameState.Idle);
                 break;
             case GameState.Win:
                 ToggleControls(false);

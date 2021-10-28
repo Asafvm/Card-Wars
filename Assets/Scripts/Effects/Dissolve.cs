@@ -30,6 +30,7 @@ public class Dissolve : MonoBehaviour
 
         } while (fade > 0);
 
+        yield return null;
 
     }
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5556789370222125403}
   - component: {fileID: 5190029474156489042}
   - component: {fileID: 7743804334688184665}
+  - component: {fileID: 2476709477222520861}
   m_Layer: 5
   m_Name: SecondaryDeck
   m_TagString: Untagged
@@ -142,3 +143,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2476709477222520861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556789370222125400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a358eb942ae8f449c18b21dccb816e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
